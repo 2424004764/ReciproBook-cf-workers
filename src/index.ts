@@ -1,26 +1,19 @@
-import { fromHono } from "chanfana";
-import { Hono } from "hono";
-import { TaskCreate } from "./endpoints/taskCreate";
-import { TaskDelete } from "./endpoints/taskDelete";
-import { TaskFetch } from "./endpoints/taskFetch";
-import { TaskList } from "./endpoints/taskList";
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { cors } from 'hono/cors'
+import type { AppEnv } from './types'
+import router from './routes'
 
-// Start a Hono app
-const app = new Hono<{ Bindings: Env }>();
+const app = new OpenAPIHono<AppEnv>()
 
-// Setup OpenAPI registry
-const openapi = fromHono(app, {
-	docs_url: "/",
-});
+app.use('*', cors())
 
-// Register OpenAPI endpoints
-openapi.get("/api/tasks", TaskList);
-openapi.post("/api/tasks", TaskCreate);
-openapi.get("/api/tasks/:taskSlug", TaskFetch);
-openapi.delete("/api/tasks/:taskSlug", TaskDelete);
+app.get('/', (c) => c.json({ status: 'ok' }))
 
-// You may also register routes for non OpenAPI directly on Hono
-// app.get('/test', (c) => c.text('Hono!'))
+app.route('/api', router)
 
-// Export the Hono app
-export default app;
+app.doc('/openapi.json', {
+  openapi: '3.0.0',
+  info: { title: 'ReciproBook API', version: '1.0.0' },
+})
+
+export default app
