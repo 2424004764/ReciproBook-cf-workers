@@ -11,9 +11,7 @@
     "nodejs_compat"
   ],
   "vars": {
-    "JWT_SECRET": "EThjhKObRUxTGjJUNljXxaTNriomKmG",
-    "WX_APPID": "wx07015e7a89d8ae92",
-    "WX_SECRET": "78f7823e85f49887567a2f37b3291b8a"
+    "WX_APPID": "wx07015e7a89d8ae92"
   },
   "d1_databases": [
     {
